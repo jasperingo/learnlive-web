@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import learnlive.entities.Attendance;
 import learnlive.entities.Lecturer;
 import learnlive.entities.SchoolClass;
+import learnlive.entities.Student;
 import learnlive.utils.MyUtils;
 
 
@@ -61,11 +63,24 @@ public class SchoolClassDB extends Database {
     }
     
     
-    public static int countAll() throws SQLException {
+    public static SchoolClass formList(ResultSet result) throws SQLException {
+        SchoolClass sch = new  SchoolClass();
+        sch.setId(result.getLong("id"));
+        sch.setCode(result.getString("code"));
+        sch.setTopic(result.getString("topic"));
+        sch.setEndAt(MyUtils.convertTimestampToLocalDateTime(result.getObject("end_at")));
+        sch.setStartAt(MyUtils.convertTimestampToLocalDateTime(result.getObject("start_at")));
+        return sch;
+    }
+    
+    
+    public static int countAll(Lecturer l) throws SQLException {
         
         try (PreparedStatement pstmt = getConnection().prepareStatement(
-                String.format("SELECT COUNT(id) AS count FROM %s", SchoolClass.TABLE)
+                String.format("SELECT COUNT(id) AS count FROM %s WHERE lecturer_id = ?", SchoolClass.TABLE)
             )) {
+            
+            pstmt.setLong(1, l.getId());
             
             ResultSet result = pstmt.executeQuery();
             
@@ -81,28 +96,87 @@ public class SchoolClassDB extends Database {
         }
     }
     
-    public static List<SchoolClass> findList(int page, int limit) throws SQLException {
+    public static List<SchoolClass> findList(Lecturer l, int page, int limit) throws SQLException {
         
         try (PreparedStatement pstmt = getConnection().prepareStatement(
-                String.format("SELECT id, topic, code, start_at, end_at FROM %s ORDER BY start_at DESC LIMIT ?, ?", 
+                String.format("SELECT id, topic, code, start_at, end_at "
+                        + "FROM %s "
+                        + "WHERE lecturer_id = ? "
+                        + "ORDER BY start_at DESC "
+                        + "LIMIT ?, ?", 
                         SchoolClass.TABLE)
             )) {
             
-            pstmt.setInt(1, page);
-            pstmt.setInt(2, limit);
+            pstmt.setLong(1, l.getId());
+            pstmt.setInt(2, page);
+            pstmt.setInt(3, limit);
             
             ResultSet result = pstmt.executeQuery();
             
             List<SchoolClass> list = new ArrayList<>();
             
             while (result.next()) {
-                SchoolClass sch = new  SchoolClass();
-                sch.setId(result.getLong("id"));
-                sch.setCode(result.getString("code"));
-                sch.setTopic(result.getString("topic"));
-                sch.setEndAt(MyUtils.convertTimestampToLocalDateTime(result.getObject("end_at")));
-                sch.setStartAt(MyUtils.convertTimestampToLocalDateTime(result.getObject("start_at")));
-                list.add(sch);
+                list.add(formList(result));
+            }
+            
+            return list;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SchoolClassDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+    }
+    
+    
+    public static int countAll(Student s) throws SQLException {
+        
+        try (PreparedStatement pstmt = getConnection().prepareStatement(
+                String.format("SELECT COUNT(school_classes.id) AS count "
+                        + "FROM %s INNER JOIN %s "
+                        + "ON school_classes.id = attendance.school_class_id "
+                        + "WHERE attendance.student_id = ? ",
+                        SchoolClass.TABLE, Attendance.TABLE)
+            )) {
+            
+            pstmt.setLong(1, s.getId());
+            
+            ResultSet result = pstmt.executeQuery();
+            
+            if (result.next()) {
+                return result.getInt("count");
+            }
+            
+            return 0;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SchoolClassDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+    }
+    
+    public static List<SchoolClass> findList(Student s, int page, int limit) throws SQLException {
+        
+        try (PreparedStatement pstmt = getConnection().prepareStatement(
+                String.format("SELECT school_classes.id, school_classes.topic, school_classes.code, "
+                        + "school_classes.start_at, school_classes.end_at "
+                        + "FROM %s INNER JOIN %s "
+                        + "ON school_classes.id = attendance.school_class_id "
+                        + "WHERE attendance.student_id = ? "
+                        + "ORDER BY start_at DESC "
+                        + "LIMIT ?, ?", 
+                        SchoolClass.TABLE, Attendance.TABLE)
+            )) {
+            
+            pstmt.setLong(1, s.getId());
+            pstmt.setInt(2, page);
+            pstmt.setInt(3, limit);
+            
+            ResultSet result = pstmt.executeQuery();
+            
+            List<SchoolClass> list = new ArrayList<>();
+            
+            while (result.next()) {
+                list.add(formList(result));
             }
             
             return list;
@@ -178,6 +252,29 @@ public class SchoolClassDB extends Database {
             
             if (rows < 1) {
                 throw new SQLException("School class take attendance not updated");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SchoolClassDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        
+    }
+    
+    
+    public static void updateEndAt(SchoolClass sch) throws SQLException {
+        
+        String sql = String.format("UPDATE %s SET end_at = ? WHERE id = ?", SchoolClass.TABLE);
+        
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+            
+            pstmt.setObject(1, sch.getEndAt());
+            pstmt.setLong(2, sch.getId());
+            
+            int rows = pstmt.executeUpdate();
+            
+            if (rows < 1) {
+                throw new SQLException("School class end at not updated");
             }
             
         } catch (SQLException ex) {

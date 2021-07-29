@@ -75,11 +75,7 @@
         </main>
        
        
-        <footer class="bg-violent py-5 px-3 text-white text-center">
-           
-            <div>Made with love by students of Information Technology in Federal University of Technology Owerri.</div>
-           
-        </footer>
+        <%@include file="res/includes/footer.html" %>
         
     </body>
     

@@ -11,13 +11,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import learnlive.db.AttendanceDB;
-import learnlive.db.SchoolClassDB;
+import learnlive.db.LoginHistoryDB;
+import learnlive.db.StudentDB;
 import learnlive.entities.Attendance;
+import learnlive.entities.LoginHistory;
 import learnlive.entities.SchoolClass;
+import learnlive.entities.Student;
 
 
 @WebServlet(name = "AttendanceServlet", urlPatterns = {
-    "/attendance/add"
+    "/attendance/add",
+    "/attendance/cancel",
+    "/attendance/lecturer/add",
 })
 public class AttendanceServlet extends LiveServlet {
     
@@ -51,7 +56,15 @@ public class AttendanceServlet extends LiveServlet {
         switch (request.getServletPath()){
             
             case "/attendance/add" :
-                add();
+                addByStudent();
+                break;
+            
+            case "/attendance/cancel" :
+                cancel();
+                break;
+                
+            case "/attendance/lecturer/add" :
+                addByLecturer();
                 break;
             
         }
@@ -66,7 +79,42 @@ public class AttendanceServlet extends LiveServlet {
         return (SchoolClass) request.getAttribute("class");
     }
     
-    private void add() throws IOException {
+    
+    private void addByStudent() throws IOException {
+        add(getAuthStudent());
+    }
+    
+    private void addByLecturer() throws IOException {
+        
+        String number = request.getParameter("matriculation_number");
+        
+        if (number == null || number.isEmpty()) {
+            formData.setFormError("Matriculation number is invalid");
+            redirectBackWithPostDataErrors();
+        } else {
+            
+            try {
+                
+                Student student = StudentDB.findByMatriculationNumber(number);
+                
+                if (student == null) {
+                    formData.setFormError("Matriculation number is invalid");
+                    redirectBackWithPostDataErrors();
+                    return;
+                }
+                
+                add(student);
+                
+            } catch (SQLException ex) {
+                redirectBackWithPostServerError();
+            }
+        }
+    }
+    
+    
+    private void add(Student student) throws IOException {
+        
+        //check if class has ended
         
         int theNumber;
         
@@ -89,7 +137,7 @@ public class AttendanceServlet extends LiveServlet {
                 return;
             }
             
-            long aid2 = AttendanceDB.findIdIfStudentExists(getAuthStudent().getId(), sch.getId());
+            long aid2 = AttendanceDB.findIdIfStudentExists(student.getId(), sch.getId());
             
             if (aid2 != 0) {
                 formData.setFormError("Student already marked attendance");
@@ -110,7 +158,7 @@ public class AttendanceServlet extends LiveServlet {
         Attendance a = new Attendance();
         a.setNumber(theNumber);
         a.setSchoolClass(sch);
-        a.setStudent(getAuthStudent());
+        a.setStudent(student);
         
         try {
             AttendanceDB.insert(a);
@@ -121,6 +169,29 @@ public class AttendanceServlet extends LiveServlet {
         
         redirectBack();
     }
+
+    private void cancel() throws IOException {
+        
+        long theNumber;
+        
+        String id = request.getParameter("id");
+        
+        try {
+            theNumber = Long.parseLong(id);
+        } catch (NumberFormatException ex) {
+            formData.setFormError("id is invalid");
+            redirectBackWithPostDataErrors();
+            return;
+        }
+        
+        try {
+            AttendanceDB.delete(theNumber);
+            redirectBack();
+        } catch (SQLException ex) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     
     
     

@@ -17,8 +17,12 @@
             <div>
                 <% if (user instanceof Lecturer) { %>
                 <a href="class/create" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill">Create class</a>
+                <% if (!request.getServletPath().equals("/lecturer-profile.jsp")) { %>
+                <a href="lecturer/profile" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill ms-3">Profile</a>
                 <% } %>
-                <a href="class/create" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill ms-3">Profile</a>
+                <% } else if (!request.getServletPath().equals("/student-profile.jsp")) { %>
+                <a href="student/profile" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill ms-3">Profile</a>
+                <% } %>
             </div>
             <% } %>
             

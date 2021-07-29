@@ -21,7 +21,9 @@ import learnlive.entities.User;
     "/class-settings",
     "/class/update-capacity",
     "/class/update-take-attendance",
-    "/class/update-end-at"
+    "/class/update-end-at",
+    "/attendance/cancel",
+    "/attendance/lecturer/add",
 })
 public class CanUpdateSchoolClassFilter  implements Filter {
     

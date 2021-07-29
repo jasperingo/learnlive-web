@@ -24,7 +24,8 @@ import learnlive.filters.PaginationFilter;
     "/lecturer/register", 
     "/lecturer/register/1", 
     "/lecturer/dashboard",
-    "/lecturer/login"
+    "/lecturer/login",
+    "/lecturer/profile"
 })
 public class LecturerServlet extends LiveServlet {
     
@@ -51,6 +52,10 @@ public class LecturerServlet extends LiveServlet {
                 
             case "/lecturer/login" :
                 forwardTo("/lecturer-login.jsp");
+                break;
+            
+            case "/lecturer/profile" :
+                forwardTo("/lecturer-profile.jsp");
                 break;
                 
         }
@@ -253,9 +258,9 @@ public class LecturerServlet extends LiveServlet {
         try {
             List<Integer> pager = (List<Integer>) request.getAttribute("pager");
             
-            List<SchoolClass> list = SchoolClassDB.findList(pager.get(1), PaginationFilter.LIMIT);
+            List<SchoolClass> list = SchoolClassDB.findList(getAuthLecturer(), pager.get(1), PaginationFilter.LIMIT);
             
-            int listCount = SchoolClassDB.countAll();
+            int listCount = SchoolClassDB.countAll(getAuthLecturer());
             
             request.setAttribute("schoolclasses", list);
             

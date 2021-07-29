@@ -17,11 +17,14 @@ import learnlive.entities.SchoolClass;
 @WebFilter(filterName = "FetchSchoolClassFilter", urlPatterns = {
     "/class",
     "/class-settings",
+    "/class-assignments",
     "/class-attendance",
     "/class/update-capacity",
     "/class/update-take-attendance",
     "/class/update-end-at",
-    "/attendance/add"
+    "/attendance/add",
+    "/attendance/cancel",
+    "/attendance/lecturer/add",
 })
 public class FetchSchoolClassFilter implements Filter {
     

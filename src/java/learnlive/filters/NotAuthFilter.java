@@ -12,21 +12,25 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import learnlive.entities.Lecturer;
-import learnlive.entities.Student;
+import learnlive.entities.User;
 
 
 @WebFilter(filterName = "NotAuthFilter", urlPatterns = {
     "/class/create", 
     "/lecturer/dashboard", 
     "/student/dashboard", 
+    "/lecturer/profile",
+    "/student/profile",
     "/class",
     "/class-settings",
     "/class-attendance",
+    "/class-assignments",
     "/class/update-capacity",
     "/class/update-take-attendance",
     "/class/update-end-at",
-    "/attendance/add"
+    "/attendance/add",
+    "/attendance/cancel",
+    "/attendance/lecturer/add"
 })
 public class NotAuthFilter implements Filter {
     
@@ -46,11 +50,7 @@ public class NotAuthFilter implements Filter {
         
         HttpSession session = httpReq.getSession();
         
-        //Lecturer user = new Lecturer(); //session.getAttribute("auth_user");
-        Student user = new Student();
-        user.setId(1);
-        session.setAttribute("auth_user", user);
-        
+        User user = (User) session.getAttribute("auth_user");
         
         if (user == null) {
             httpResp.sendRedirect(httpReq.getContextPath());

@@ -66,20 +66,20 @@
                         </fieldset>
                     </form>
                     
-                    <form action="" method="POST" class="mt-5">
+                    <form action="class/update-end-at" method="POST" class="mt-5">
                         <input type="hidden" name="code" value="<%= cl.getCode() %>" />
                         <div>
                             <label for="" class="col-sm-3 col-form-label fw-bold">End class</label>
-                            <button class="btn btn-outline-secondary btn-lg d-block w-100" type="button" id="button-addon2">End</button>
+                            <button class="btn btn-outline-secondary btn-lg d-block w-100" type="submit">End</button>
                         </div>
                     </form>
-                                       
+                    
                     <% } else { %>
                     
                     <div class="alert alert-danger my-5" role="alert">This class has ended</div>
                     
                     <% } %>
-                                       
+                                 
                     
                 </div>
                 

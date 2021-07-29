@@ -12,7 +12,7 @@
 <html>
     
     <jsp:include page="/res/includes/head.jsp">
-        <jsp:param name="title" value="Dashboard Student | LearnLive" />
+        <jsp:param name="title" value="Dashboard Lecturer | LearnLive" />
     </jsp:include>
     
     <body>
@@ -23,7 +23,8 @@
         <main>
            
             <section class="container">
-                
+                 
+                <h2 class="mt-3">Created classes</h2>
                 
                 <% List<SchoolClass> list = (List<SchoolClass>) request.getAttribute("schoolclasses"); %>
                     
@@ -61,11 +62,8 @@
         </main>
        
        
-        <footer class="bg-violent py-5 px-3 text-white text-center">
-           
-            <div>Made with love by students of Information Technology in Federal University of Technology Owerri.</div>
-           
-        </footer>
+        <%@include file="res/includes/footer.html" %>
+        
         
     </body>
     

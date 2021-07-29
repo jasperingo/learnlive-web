@@ -10,24 +10,32 @@
         <url-pattern>/class/create</url-pattern>
         <url-pattern>/lecturer/dashboard</url-pattern>
         <url-pattern>/student/dashboard</url-pattern>
+        <url-pattern>/lecturer/profile</url-pattern>
+        <url-pattern>/student/profile</url-pattern>
         <url-pattern>/class</url-pattern>
         <url-pattern>/class-settings</url-pattern>
         <url-pattern>/class-attendance</url-pattern>
+        <url-pattern>/class-assignments</url-pattern>
         <url-pattern>/class/update-capacity</url-pattern>
         <url-pattern>/class/update-take-attendance</url-pattern>
         <url-pattern>/class/update-end-at</url-pattern>
         <url-pattern>/attendance/add</url-pattern>
+        <url-pattern>/attendance/cancel</url-pattern>
+        <url-pattern>/attendance/lecturer/add</url-pattern>
     </filter-mapping>
     
     <filter-mapping>
         <filter-name>FetchSchoolClassFilter</filter-name>
         <url-pattern>/class</url-pattern>
         <url-pattern>/class-settings</url-pattern>
+        <url-pattern>/class-assignments</url-pattern>
         <url-pattern>/class-attendance</url-pattern>
         <url-pattern>/class/update-capacity</url-pattern>
         <url-pattern>/class/update-take-attendance</url-pattern>
         <url-pattern>/class/update-end-at</url-pattern>
         <url-pattern>/attendance/add</url-pattern>
+        <url-pattern>/attendance/cancel</url-pattern>
+        <url-pattern>/attendance/lecturer/add</url-pattern>
     </filter-mapping>
     
     <filter-mapping>
@@ -36,6 +44,8 @@
          <url-pattern>/class/update-capacity</url-pattern>
          <url-pattern>/class/update-take-attendance</url-pattern>
          <url-pattern>/class/update-end-at</url-pattern>
+         <url-pattern>/attendance/cancel</url-pattern>
+         <url-pattern>/attendance/lecturer/add</url-pattern>
     </filter-mapping>
     
     <error-page>  

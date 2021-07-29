@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +27,7 @@ import learnlive.utils.MyUtils;
 @WebServlet(name = "SchoolClassServlet", urlPatterns = {
     "/class/create",
     "/class",
+    "/class-assignments",
     "/class-attendance",
     "/class-settings",
     "/class/update-capacity",
@@ -55,6 +54,10 @@ public class SchoolClassServlet extends LiveServlet {
                 
             case "/class-settings" :
                 forwardTo("/class-settings.jsp");
+                break;
+                
+            case "/class-assignments" :
+                forwardTo("/class-assignments.jsp");
                 break;
                 
             case "/class-attendance" :
@@ -90,6 +93,9 @@ public class SchoolClassServlet extends LiveServlet {
                updateTakeAttendance();
                break;
             
+            case  "/class/update-end-at" :
+                updateEndAt();
+                break;
             
         }
         
@@ -268,7 +274,24 @@ public class SchoolClassServlet extends LiveServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    private void updateEndAt() throws IOException {
+        
+        //check if already ended
+        
+        SchoolClass sch = getSchoolClass();
+        
+        sch.setEndAt(LocalDateTime.now());
+        
+        try {
+            SchoolClassDB.updateEndAt(sch);
+            redirectBack();
+        } catch (SQLException ex) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        
+    }
+
     
     
 }

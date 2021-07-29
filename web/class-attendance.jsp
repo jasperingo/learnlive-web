@@ -13,7 +13,7 @@
 <html>
     
     <jsp:include page="/res/includes/head.jsp">
-        <jsp:param name="title" value="Class Settings | LearnLive" />
+        <jsp:param name="title" value="Class Attendance | LearnLive" />
     </jsp:include>
     
     <body>
@@ -34,7 +34,7 @@
                     
                     <% FormData.Flasher data = new FormData.Flasher(session); %>
                     
-                    <% if (user instanceof Student) { %>
+                    <% if (cl.getEndAt() == null && user instanceof Student) { %>
                     
                     <% String marked = (String) request.getAttribute("student_marked"); %>
                     
@@ -55,6 +55,30 @@
                         </div>
                     </form>
                     <% } %>
+                    <% } %>
+                    
+                    <% if (user instanceof Lecturer) { %>
+                    <form action="attendance/lecturer/add" method="POST" class="mt-5" novalidate="">
+                        
+                        <% if (data.hasFormError()) { %>
+                        <div class="alert alert-danger" role="alert"><%= data.getFormError() %></div>
+                        <% } %>
+                        
+                        <input type="hidden" name="code" value="<%= cl.getCode() %>" />
+                        
+                        <div class="mb-2">
+                            <label for="m-input" class="form-label fw-bold">Matriculation number</label>
+                            <input type="text" class="form-control form-control-lg" name="matriculation_number" id="m-input" required="" />
+                        </div>
+                        
+                        <div>
+                            <label for="attendance-input" class="form-label fw-bold">Attendance number</label>
+                            <div class="input-group input-group-lg">
+                                <input type="number" class="form-control" name="number" id="attendance-input" required="" />
+                                <button class="btn btn-outline-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                     <% } %>
                     
                     <% List<Attendance> list = (List<Attendance>) request.getAttribute("data_list"); %>
@@ -86,9 +110,10 @@
                                 <td><%= MyUtils.formatDateTime(a.getCreatedAt()) %></td>
                                 <% if (user instanceof Lecturer) { %>
                                 <td>
-                                    <form>
-                                        <input type="hidden" value="<%= a.getId() %>" />
-                                        <button type="submit" class="text-danger">Cancel</button>
+                                    <form method="POST" action="attendance/cancel">
+                                        <input type="hidden" name="id" value="<%= a.getId() %>" />
+                                        <input type="hidden" name="code" value="<%= cl.getCode() %>" />
+                                        <button type="submit" class="btn btn-danger">Cancel</button>
                                     </form>
                                 </td>
                                 <% } %>

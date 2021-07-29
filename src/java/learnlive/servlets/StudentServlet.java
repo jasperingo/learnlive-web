@@ -4,20 +4,25 @@ package learnlive.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import learnlive.db.LoginHistoryDB;
+import learnlive.db.SchoolClassDB;
 import learnlive.db.StudentDB;
 import learnlive.entities.LoginHistory;
+import learnlive.entities.SchoolClass;
 import learnlive.entities.Student;
+import learnlive.filters.PaginationFilter;
 
 
 @WebServlet(name = "StudentServlet", urlPatterns = {
     "/student/register", 
     "/student/dashboard",
-    "/student/login"
+    "/student/login",
+    "/student/profile"
 })
 public class StudentServlet extends LiveServlet {
     
@@ -35,11 +40,15 @@ public class StudentServlet extends LiveServlet {
                 break;
                 
             case "/student/dashboard" :
-                forwardTo("/student-dashboard.jsp");
+                forwardToDashboard();
                 break;
                 
             case "/student/login" :
                 forwardTo("/student-login.jsp");
+                break;
+            
+            case "/student/profile" : 
+                forwardTo("/student-profile.jsp");
                 break;
                 
         }
@@ -203,6 +212,26 @@ public class StudentServlet extends LiveServlet {
         }
         
         respondWithPostDataErrors();
+    }
+
+    private void forwardToDashboard() throws ServletException, IOException {
+        
+        try {
+            List<Integer> pager = (List<Integer>) request.getAttribute("pager");
+            
+            List<SchoolClass> list = SchoolClassDB.findList(getAuthStudent(), pager.get(1), PaginationFilter.LIMIT);
+            
+            int listCount = SchoolClassDB.countAll(getAuthStudent());
+            
+            request.setAttribute("schoolclasses", list);
+            
+            request.setAttribute("data_count", listCount);
+            
+            forwardTo("/student-dashboard.jsp");
+            
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
     }
     
     

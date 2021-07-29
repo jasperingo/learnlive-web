@@ -1,5 +1,6 @@
 
 
+<%@page import="learnlive.entities.Lecturer"%>
 <%@page import="learnlive.utils.MyUtils"%>
 <%@page import="learnlive.entities.SchoolClass"%>
 
@@ -65,17 +66,19 @@
         
         <ul class="list-group list-group-horizontal mt-4 mb-2 overflow-auto w-100 text-nowrap">
             <li class="list-group-item border-0 ps-0">
-                <a href="class?code=<%= cl.getCode() %>" class="btn <%= getActive(request, "/class.jsp") %>">Home</a>
+                <a href="class?code=<%= cl.getCode() %>" class="btn <%= getActive(request, "/class.jsp") %>">Stream</a>
             </li>
             <li class="list-group-item border-0">
                 <a href="class-attendance?code=<%= cl.getCode() %>" class="btn <%= getActive(request, "/class-attendance.jsp") %>">Attendance</a>
             </li>
             <li class="list-group-item border-0">
-                <a href="class-assignments?code=<%= cl.getCode() %>" class="btn <%= getActive(request, "/class-assignment.jsp") %>">Assignments</a>
+                <a href="class-assignments?code=<%= cl.getCode() %>" class="btn <%= getActive(request, "/class-assignments.jsp") %>">Assignments</a>
             </li>
+            <% if (session.getAttribute("auth_user") instanceof Lecturer) { %>
             <li class="list-group-item border-0">
                 <a href="class-settings?code=<%= cl.getCode() %>" class="btn <%= getActive(request, "/class-settings.jsp") %>">Settings</a>
             </li>
+            <% } %>
        </ul>
 
 

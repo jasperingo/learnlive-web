@@ -42,23 +42,19 @@ public class IsAuthFilter implements Filter {
         
         HttpSession session = httpReq.getSession();
         
-        User user = (User)session.getAttribute("user");
+        User user = (User)session.getAttribute("auth_user");
+        
+        System.out.println(user instanceof Student);
         
         if (user != null && user instanceof Lecturer) {
-            
-            if (httpReq.getServletPath().equals("/lecturer/register/1")) {
-                httpResp.sendRedirect("../dashboard");
-            } else {
-                httpResp.sendRedirect("dashboard");
-            }
-            
+            httpResp.sendRedirect(httpReq.getContextPath()+"/lecturer/dashboard");
         } else if (user != null && user instanceof Student) {
-            httpResp.sendRedirect("dashboard");
+            httpResp.sendRedirect(httpReq.getContextPath()+"/student/dashboard");
         } else {
             chain.doFilter(request, response);
         }
     }
-     
+    
     @Override
     public void destroy() {
          

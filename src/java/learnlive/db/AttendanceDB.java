@@ -109,7 +109,6 @@ public class AttendanceDB extends Database {
     }
     
     
-    
     public static Attendance form(ResultSet result) throws SQLException {
         Attendance a = new  Attendance();
         a.setId(result.getLong("attendance_id"));
@@ -176,6 +175,31 @@ public class AttendanceDB extends Database {
             throw ex;
         }
     }
+    
+    
+    public static void delete(long id) throws SQLException {
+        
+        String sql = String.format(
+                "DELETE FROM %s WHERE id = ?", Attendance.TABLE
+        );
+        
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+            
+            pstmt.setLong(1, id);
+            
+            int rows = pstmt.executeUpdate();
+            
+            if (rows < 1) {
+                throw new SQLException("Attendance not deleted");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AttendanceDB.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        
+    }
+
     
     
     
