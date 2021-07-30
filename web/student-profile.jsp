@@ -45,7 +45,11 @@
                             <dd class="fs-4"><%= s.getPhoneNumber() %></dd>
                         </div>
                     </dl>
-               
+                        
+                    <form method="POST" action="student/logout">
+                        <button class="btn btn-danger">Log out</button>
+                    </form>
+                    
                 </div>
                
            </section>

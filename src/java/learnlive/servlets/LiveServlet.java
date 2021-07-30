@@ -115,11 +115,11 @@ abstract public class LiveServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath()+url);
     }
     
-    private void logout() throws IOException {
+    protected void logout() throws IOException {
         
         HttpSession session = request.getSession();
         session.invalidate();
-        response.sendRedirect("login");
+        redirectTo("");
     }
 
     

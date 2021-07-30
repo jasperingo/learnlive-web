@@ -176,7 +176,7 @@ public class SchoolClassServlet extends LiveServlet {
             return;
         }
         
-        redirectTo("/class?id="+sch.getId());
+        redirectTo("/class?code="+sch.getCode());
     }
     
     

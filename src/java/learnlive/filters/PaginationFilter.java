@@ -20,7 +20,7 @@ import javax.servlet.annotation.WebFilter;
 })
 public class PaginationFilter implements Filter {
     
-    public static int LIMIT = 2;
+    public static int LIMIT = 10;
  
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

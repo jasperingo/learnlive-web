@@ -22,7 +22,8 @@ import learnlive.filters.PaginationFilter;
     "/student/register", 
     "/student/dashboard",
     "/student/login",
-    "/student/profile"
+    "/student/profile",
+    "/student/logout"
 })
 public class StudentServlet extends LiveServlet {
     
@@ -73,6 +74,10 @@ public class StudentServlet extends LiveServlet {
                 
             case "/student/login" :
                 login();
+                break;
+            
+            case "/student/logout" :
+                logout();
                 break;
             
         }

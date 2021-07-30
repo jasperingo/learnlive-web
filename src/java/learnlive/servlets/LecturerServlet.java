@@ -25,7 +25,8 @@ import learnlive.filters.PaginationFilter;
     "/lecturer/register/1", 
     "/lecturer/dashboard",
     "/lecturer/login",
-    "/lecturer/profile"
+    "/lecturer/profile",
+    "/lecturer/logout"  
 })
 public class LecturerServlet extends LiveServlet {
     
@@ -83,6 +84,10 @@ public class LecturerServlet extends LiveServlet {
                 
             case "/lecturer/login" :
                 login();
+                break;
+                
+            case "/lecturer/logout" :
+                logout();
                 break;
             
         }
@@ -272,6 +277,7 @@ public class LecturerServlet extends LiveServlet {
             throw new ServletException(ex);
         }
     }
+
     
     
     

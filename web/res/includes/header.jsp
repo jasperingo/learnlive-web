@@ -16,13 +16,27 @@
             <% if (user != null && !request.getServletPath().equals("/index.jsp")) { %>
             <div>
                 <% if (user instanceof Lecturer) { %>
+                
+                <% if (request.getServletPath().equals("/lecturer-dashboard.jsp")) { %>
                 <a href="class/create" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill">Create class</a>
-                <% if (!request.getServletPath().equals("/lecturer-profile.jsp")) { %>
+                <% } else { %>
+                <a href="lecturer/dashboard" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill">Dashboard</a>
+                <% } %>
+                
+                <% if (request.getServletPath().equals("/lecturer-dashboard.jsp")) { %>
                 <a href="lecturer/profile" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill ms-3">Profile</a>
                 <% } %>
-                <% } else if (!request.getServletPath().equals("/student-profile.jsp")) { %>
+                
+                <% } else { %>
+                
+                <% if (request.getServletPath().equals("/student-dashboard.jsp")) { %>
                 <a href="student/profile" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill ms-3">Profile</a>
+                <% } else { %>
+                <a href="student/dashboard" class="text-white text-decoration-none bg-violent p-2 p-md-3 rounded-pill">Dashboard</a>
                 <% } %>
+                
+                <% } %>
+                
             </div>
             <% } %>
             
