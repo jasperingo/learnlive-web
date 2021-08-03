@@ -17,10 +17,11 @@ import javax.servlet.annotation.WebFilter;
     "/lecturer/dashboard", 
     "/student/dashboard",
     "/class-attendance",
+    "/class-assignments"
 })
 public class PaginationFilter implements Filter {
     
-    public static int LIMIT = 10;
+    public static int LIMIT = 2;
  
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

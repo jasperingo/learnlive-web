@@ -54,13 +54,13 @@
                 <% } %>
                 
                 <jsp:include page="res/includes/pager.jsp">
-                    <jsp:param name="url" value="lecturer/dashboard?" />
+                    <jsp:param name="url" value="student/dashboard?" />
                 </jsp:include>
 
             </section>
            
         </main>
-       
+        
        
         <%@include file="res/includes/footer.html" %>
         

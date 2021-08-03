@@ -23,13 +23,11 @@
                 
                 <div class="container">
                     
-                    <% if (false) { %>
                     <video width="300" height="400" class="d-block w-100 h-auto bg-dark my-5" controls>
                         <source src="res/vid/test.mp4" type="video/mp4">
                         <source src="movie.ogg" type="video/ogg">
                         <span>Your browser does not support the video tag.</span>
                     </video>
-                    <% } %>
                     
                     <div class="alert alert-danger my-5" role="alert">Currently unavailable</div>
                     

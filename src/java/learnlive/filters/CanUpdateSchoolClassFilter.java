@@ -24,6 +24,8 @@ import learnlive.entities.User;
     "/class/update-end-at",
     "/attendance/cancel",
     "/attendance/lecturer/add",
+    "/assignment/u",
+    "/submission/d"
 })
 public class CanUpdateSchoolClassFilter  implements Filter {
     

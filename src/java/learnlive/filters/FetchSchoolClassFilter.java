@@ -25,6 +25,8 @@ import learnlive.entities.SchoolClass;
     "/attendance/add",
     "/attendance/cancel",
     "/attendance/lecturer/add",
+    "/assignment/u",
+    "/submission/u"
 })
 public class FetchSchoolClassFilter implements Filter {
     
@@ -33,8 +35,7 @@ public class FetchSchoolClassFilter implements Filter {
     }    
     
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         
         try {

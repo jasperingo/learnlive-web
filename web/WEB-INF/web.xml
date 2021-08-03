@@ -22,6 +22,10 @@
         <url-pattern>/attendance/add</url-pattern>
         <url-pattern>/attendance/cancel</url-pattern>
         <url-pattern>/attendance/lecturer/add</url-pattern>
+        <url-pattern>/assignment/u</url-pattern>
+        <url-pattern>/assignment/d</url-pattern>
+        <url-pattern>/submission/u</url-pattern>
+        <url-pattern>/submission/d</url-pattern>
     </filter-mapping>
     
     <filter-mapping>
@@ -36,6 +40,8 @@
         <url-pattern>/attendance/add</url-pattern>
         <url-pattern>/attendance/cancel</url-pattern>
         <url-pattern>/attendance/lecturer/add</url-pattern>
+        <url-pattern>/assignment/u</url-pattern>
+        <url-pattern>/submission/u</url-pattern>
     </filter-mapping>
     
     <filter-mapping>
@@ -46,6 +52,7 @@
          <url-pattern>/class/update-end-at</url-pattern>
          <url-pattern>/attendance/cancel</url-pattern>
          <url-pattern>/attendance/lecturer/add</url-pattern>
+         <url-pattern>/assignment/u</url-pattern>
     </filter-mapping>
     
     <error-page>  

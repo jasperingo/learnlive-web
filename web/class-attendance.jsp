@@ -36,9 +36,9 @@
                     
                     <% if (cl.getEndAt() == null && user instanceof Student) { %>
                     
-                    <% String marked = (String) request.getAttribute("student_marked"); %>
+                    <% long marked = (Long) request.getAttribute("attendance_id"); %>
                     
-                    <% if (marked.equals("false")) { %>
+                    <% if (marked < 1) { %>
                     <form action="attendance/add" method="POST" class="mt-5" novalidate="">
                         
                         <% if (data.hasFormError()) { %>

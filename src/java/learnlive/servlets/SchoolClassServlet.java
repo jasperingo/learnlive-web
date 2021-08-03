@@ -10,16 +10,22 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import learnlive.db.AssignmentDB;
 import learnlive.db.AttendanceDB;
 import learnlive.db.SchoolClassDB;
+import learnlive.db.SubmissionDB;
+import learnlive.entities.Assignment;
 import learnlive.entities.Attendance;
 import learnlive.entities.Lecturer;
 import learnlive.entities.SchoolClass;
 import learnlive.entities.Student;
+import learnlive.entities.Submission;
 import learnlive.filters.PaginationFilter;
 import learnlive.utils.MyUtils;
 
@@ -57,7 +63,7 @@ public class SchoolClassServlet extends LiveServlet {
                 break;
                 
             case "/class-assignments" :
-                forwardTo("/class-assignments.jsp");
+                forwardToAssignments();
                 break;
                 
             case "/class-attendance" :
@@ -240,23 +246,29 @@ public class SchoolClassServlet extends LiveServlet {
         
         redirectBack();
     }
+    
+    private long setIfStudentHasAttendance() throws SQLException {
+        SchoolClass sch = getSchoolClass();
+        
+        if (getAuthUser() instanceof Student) {
 
+            Long aid = AttendanceDB.findIdIfStudentExists(getAuthStudent().getId(), sch.getId());
+            
+            request.setAttribute("attendance_id", aid);
+            
+            return aid;
+        }
+        
+        return 0;
+    }
+    
     private void forwordToAttendance() throws ServletException, IOException {
         
         SchoolClass sch = getSchoolClass();
+        
         try {
             
-            if (getAuthUser() instanceof Student) {
-            
-                long aid2 = AttendanceDB.findIdIfStudentExists(getAuthStudent().getId(), sch.getId());
-                
-                if (aid2 != 0) {
-                    request.setAttribute("student_marked", "true");
-                } else {
-                    request.setAttribute("student_marked", "false");
-                }
-            }
-            
+            setIfStudentHasAttendance();
             
             List<Integer> pager = (List<Integer>) request.getAttribute("pager");
             
@@ -290,6 +302,45 @@ public class SchoolClassServlet extends LiveServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         
+    }
+    
+    
+    private void forwardToAssignments() throws ServletException, IOException {
+        
+        try {
+            
+            SchoolClass sch = getSchoolClass();
+            
+            long attendance = setIfStudentHasAttendance();
+            
+            Assignment a = AssignmentDB.findBySchoolClass(sch);
+            
+            if (getAuthUser() instanceof Student && a != null) {
+                Long subID = SubmissionDB.findIdByAttendaceAndAssignment(a.getId(), attendance);
+                request.setAttribute("submission_id", subID);
+            }
+            
+            if (a != null) {
+                
+                List<Integer> pager = (List<Integer>) request.getAttribute("pager");
+
+                List<Submission> list = SubmissionDB.find(a.getId(), pager.get(1), PaginationFilter.LIMIT);
+
+                int listCount = SubmissionDB.countAll(a.getId());
+
+                request.setAttribute("data_list", list);
+                
+                request.setAttribute("data_count", listCount);
+            
+            }
+            
+            request.setAttribute("assignment", a);
+            
+            forwardTo("/class-assignments.jsp");
+            
+        } catch (SQLException ex) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     

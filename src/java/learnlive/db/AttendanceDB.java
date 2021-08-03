@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static learnlive.db.Database.getConnection;
 import learnlive.entities.Attendance;
 import learnlive.entities.SchoolClass;
 import learnlive.entities.Student;
@@ -75,7 +74,6 @@ public class AttendanceDB extends Database {
         }
          
     }
-     
     
     
     public static void insert(Attendance a) throws SQLException {

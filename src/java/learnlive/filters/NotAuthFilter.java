@@ -30,7 +30,11 @@ import learnlive.entities.User;
     "/class/update-end-at",
     "/attendance/add",
     "/attendance/cancel",
-    "/attendance/lecturer/add"
+    "/attendance/lecturer/add",
+    "/assignment/u",
+    "/assignment/d",
+    "/submission/d",
+    "/submission/u"
 })
 public class NotAuthFilter implements Filter {
     

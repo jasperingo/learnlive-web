@@ -129,6 +129,18 @@ public class AttendanceServlet extends LiveServlet {
             if (theNumber < 1) 
                 throw new NumberFormatException();
             
+            if (!sch.isTakeAttendance()) {
+                formData.setFormError("Attendance can't be marked yet");
+                redirectBackWithPostDataErrors();
+                return;
+            }
+            
+            if (theNumber > sch.getCapacity()) {
+                formData.setFormError("Number can't be greater than attendance limit");
+                redirectBackWithPostDataErrors();
+                return;
+            }
+            
             long aid = AttendanceDB.findIdIfNumberExists(theNumber, sch.getId());
             
             if (aid != 0) {
