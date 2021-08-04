@@ -3,6 +3,8 @@ package learnlive.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,8 +12,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +55,7 @@ public class SchoolClassServlet extends LiveServlet {
                 break;
                 
             case "/class" :
-                forwardTo("/class.jsp");
+                forwardToClass();
                 break;
                 
             case "/class-settings" :
@@ -341,6 +341,23 @@ public class SchoolClassServlet extends LiveServlet {
         } catch (SQLException ex) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void forwardToClass() throws ServletException, IOException {
+        
+        String ip;
+        
+        try(final DatagramSocket socket = new DatagramSocket()){
+            socket.connect(InetAddress.getByName("8.8.8.8"), 5002);
+            ip = socket.getLocalAddress().getHostAddress();
+        }catch(Exception e){
+            InetAddress ina = InetAddress.getLocalHost();
+            ip = ina.getHostAddress();
+        }
+        
+        request.setAttribute("stream_ip", ip);
+        
+        forwardTo("/class.jsp");
     }
 
     

@@ -23,14 +23,10 @@
                 
                 <div class="container">
                     
-                    <video width="300" height="400" class="d-block w-100 h-auto bg-dark my-5" controls>
-                        <source src="res/vid/test.mp4" type="video/mp4">
-                        <source src="movie.ogg" type="video/ogg">
-                        <span>Your browser does not support the video tag.</span>
-                    </video>
+                    <video id="screen" width="300" height="400" 
+                           class="d-block w-100 h-auto bg-dark my-5" controls poster="res/img/favicon.png"></video>
                     
-                    <div class="alert alert-danger my-5" role="alert">Currently unavailable</div>
-                    
+                    <button id="start-stream" class="btn btn-primary" data-ip="${stream_ip}">Start</button>
                     
                 </div>
                 
@@ -40,6 +36,9 @@
         
        
         <%@include file="res/includes/footer.html" %>
+        
+        <script src="res/js/hls.js"></script>
+         
         
     </body>
     

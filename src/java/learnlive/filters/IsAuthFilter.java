@@ -44,8 +44,6 @@ public class IsAuthFilter implements Filter {
         
         User user = (User)session.getAttribute("auth_user");
         
-        System.out.println(user instanceof Student);
-        
         if (user != null && user instanceof Lecturer) {
             httpResp.sendRedirect(httpReq.getContextPath()+"/lecturer/dashboard");
         } else if (user != null && user instanceof Student) {

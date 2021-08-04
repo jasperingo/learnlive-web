@@ -208,7 +208,7 @@ public class LecturerServlet extends LiveServlet {
         
         removeSessionData("lecturer");
         putSessionData("auth_user", lec);
-        response.sendRedirect("/lecturer/dashboard");
+        redirectTo("/lecturer/dashboard");
     }
     
     
